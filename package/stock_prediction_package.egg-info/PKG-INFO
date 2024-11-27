@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: stock-prediction-package
+Version: 0.1.0
+Summary: Prediction Apple stock using ARIMA
+Author: Ivan Manhique
+Author-email: viriatomanhique@gmail.com
+Requires-Python: >=3.10.12
