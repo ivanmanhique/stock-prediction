@@ -1,5 +1,0 @@
-setup.py
-stock_prediction_package.egg-info/PKG-INFO
-stock_prediction_package.egg-info/SOURCES.txt
-stock_prediction_package.egg-info/dependency_links.txt
-stock_prediction_package.egg-info/top_level.txt
