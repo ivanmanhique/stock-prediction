@@ -11,8 +11,11 @@ Predictions plotted alongside actual stock prices for better comparison
 
 📁 Project Structure
 ├── data/                 # Historical stock data (e.g., AAPL.csv)
+
 ├── notebooks/            # Jupyter notebooks for analysis and experiments
+
 ├── README.md             # Project overview and instructions
+
 ├── requirements.txt      # Required Python libraries
 
 
