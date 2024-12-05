@@ -24,6 +24,7 @@ pip (Python package manager)
 Installation
 Clone the repository:
   git clone https://github.com/ivanmanhique/stock-prediction.git
+  
 cd stock-prediction
 
 Install dependencies:
