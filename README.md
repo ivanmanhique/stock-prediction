@@ -10,12 +10,11 @@ Evaluation of model performance
 Predictions plotted alongside actual stock prices for better comparison
 
 📁 Project Structure
-bash
-Copy code
 ├── data/                 # Historical stock data (e.g., AAPL.csv)
 ├── notebooks/            # Jupyter notebooks for analysis and experiments
 ├── README.md             # Project overview and instructions
 ├── requirements.txt      # Required Python libraries
+
 
 🚀 Getting Started
 Prerequisites
