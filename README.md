@@ -28,6 +28,7 @@ cd stock-prediction
 
 Install dependencies:
   pip install -r requirements.txt
+  
 🧠 Model Details
 ARIMA Components
 AR (Auto-Regressive): Captures dependencies between observations.
