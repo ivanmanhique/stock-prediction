@@ -1,8 +1,9 @@
+from typing import Union
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 
 class MlModel(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+    id: Union[int, None] = Field(default=None, primary_key=True)
     name: str = Field(index=True)
 
 
