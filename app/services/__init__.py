@@ -1,1 +1,1 @@
-from .ml_service import continueTrain
+from .ml_service import continueTrain, predict

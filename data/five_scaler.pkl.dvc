@@ -1,0 +1,5 @@
+outs:
+- md5: 41919eba858460fa56f154cde94d6f44
+  size: 132
+  hash: md5
+  path: five_scaler.pkl

@@ -1,3 +1,7 @@
 /AAPL.csv
 .venv
 /model.h5
+/five.h5
+/five_scaler.pkl
+/six.h5
+/six_scaler.pkl

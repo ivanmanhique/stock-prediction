@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, Depends
 from sqlmodel import Session, select
 from app.models import MlModel, get_session  # Adjust import path as needed
-from app.services import continueTrain
+from app.services import continueTrain, predict
 
 my_router = APIRouter()
 
@@ -18,9 +18,12 @@ async def continue_training(model_name:str,
     session.refresh(new_model)
     return metrics
 
+
 @my_router.post('/predict')
-async def predict(model_name:str, input: UploadFile):
-    pass
+async def preditct(model_name:str, input: UploadFile):
+    predictions =  predict(model_name, input)
+    return predictions
+
 
 @my_router.get('/models', response_model=list[str])
 async def getModels(session: Session = Depends(get_session)) -> list[str]:

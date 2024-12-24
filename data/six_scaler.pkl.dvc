@@ -1,0 +1,5 @@
+outs:
+- md5: 656032af248d8aa82a60ba7b654656df
+  size: 719
+  hash: md5
+  path: six_scaler.pkl
