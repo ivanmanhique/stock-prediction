@@ -1,1 +1,1 @@
-from .ml_service import continueTrain, predict
+from .ml_service import continueTrain, predict, optimize_hyperparameters

@@ -1,14 +1,15 @@
 from fastapi import APIRouter, UploadFile, Depends
 from sqlmodel import Session, select
 from app.models import MlModel, get_session  # Adjust import path as needed
-from app.services import continueTrain, predict
+from app.services import continueTrain, predict, optimize_hyperparameters
 
 my_router = APIRouter()
 
 @my_router.post('/continue-train')
 async def continue_training(model_name:str, 
                             train_input: UploadFile,
-                            new_model_name: str, session: Session = Depends(get_session)):
+                            new_model_name: str, 
+                            session: Session = Depends(get_session)):
     
     metrics = continueTrain(model_name=model_name, train_input=train_input, newModelname=new_model_name)
     new_model = MlModel(name=new_model_name)
@@ -35,3 +36,8 @@ async def getModels(session: Session = Depends(get_session)) -> list[str]:
 
     # Return the list of model names
     return model_names
+
+@my_router.post("/optimize")
+async def optimize_model(train_input: UploadFile, newModelname: str):
+    results = optimize_hyperparameters(train_input, newModelname)
+    return results

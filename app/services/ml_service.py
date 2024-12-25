@@ -3,10 +3,13 @@ from fastapi import UploadFile
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from keras._tf_keras.keras.models import load_model,Sequential
+from keras._tf_keras.keras.layers import Dense, LSTM
 import os.path as path
 import joblib
-
 import tensorflow as tf
+import optuna
+
+
 tf.config.experimental_run_functions_eagerly(True)
 
 def getStockDataForModel(data : UploadFile) -> pd.DataFrame:
@@ -102,3 +105,63 @@ def predict(model_name: str, test_input:UploadFile):
     
     return predictions.tolist()
 
+
+
+
+def objective(trial, train_data, x_train, y_train, newModelname):
+    # Hyperparameters to tune
+    units = trial.suggest_int('units', 50, 200)
+    batch_size = trial.suggest_categorical('batch_size', [16, 32, 64])
+    learning_rate = trial.suggest_loguniform('learning_rate', 1e-4, 1e-2)
+    epochs = trial.suggest_int('epochs', 5, 50)
+
+    # Define the model
+    model = Sequential([
+        LSTM(units, return_sequences=False, input_shape=(x_train.shape[1], 1)),
+        Dense(1)
+    ])
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+        loss='mean_squared_error'
+    )
+
+    # Train the model
+    history = model.fit(
+        x_train, y_train,
+        batch_size=batch_size,
+        epochs=epochs,
+        verbose=0
+    )
+
+    # Evaluate performance using validation loss
+    loss = history.history['loss'][-1]
+
+    # Save the best model
+    if trial.should_prune():
+        raise optuna.exceptions.TrialPruned()
+
+    # Save the model with the trial number
+    data_folder = path.join(path.dirname(__file__), '../../', 'data')
+    save_model_folder = path.join(data_folder, f"{newModelname}_trial_{trial.number}.h5")
+    model.save(save_model_folder)
+
+    return loss
+
+def optimize_hyperparameters(train_input: UploadFile, newModelname: str):
+    # Load training data
+    df = getStockDataForModel(train_input)
+    x_train, y_train = prepareDataforModel(df, newModelname)
+
+    # Create a study and optimize
+    study = optuna.create_study(direction="minimize")
+    study.optimize(
+        lambda trial: objective(trial, df, x_train, y_train, newModelname),
+        n_trials=10
+    )
+
+    # Return the best trial
+    best_trial = study.best_trial
+    return {
+        "best_params": best_trial.params,
+        "best_value": best_trial.value
+    }
