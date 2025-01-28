@@ -1,0 +1,42 @@
+---
+- name: Deploy FastAPI App on Local Servers
+  hosts: all
+  become: true  # Run tasks as root
+
+  tasks:
+    # 1. Install Docker
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    # 2. Start Docker service
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    # 3. Copy application files to the remote servers
+    - name: Copy application files
+      copy:
+        src: .
+        dest: /opt/fastapi_app
+        owner: root
+        group: root
+        mode: '0755'
+
+    # 4. Build Docker image
+    - name: Build Docker image
+      command: docker build -t fastapi-app /opt/fastapi_app
+
+    # 5. Run the FastAPI container
+    - name: Run FastAPI container
+      command: docker run -d -p 8000:8000 --name fastapi-app-container fastapi-app
+
+    # 6. Verify the container is running
+    - name: Verify container is running
+      shell: docker ps | grep fastapi-app
+      register: container_status
+      failed_when: container_status.rc != 0
